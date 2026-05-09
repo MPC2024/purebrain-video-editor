@@ -91,8 +91,9 @@ export default function Navbar({
       <DownloadProgressModal />
 
       <div className="flex items-center gap-2">
-        <div className="pointer-events-auto flex h-11 w-11 items-center justify-center rounded-md invert dark:invert-0">
-          <LogoIcons.scenify />
+        <div className="pointer-events-auto flex h-11 items-center justify-center rounded-md px-2">
+          <span className="text-sm font-bold tracking-tight" style={{ color: '#f1420b' }}>Pure</span>
+          <span className="text-sm font-bold tracking-tight text-foreground">Brain</span>
         </div>
 
         <div className=" pointer-events-auto flex h-10 items-center px-1.5">
@@ -139,12 +140,7 @@ export default function Navbar({
           >
             <Keyboard className="size-5" />
           </Button>
-          <Link href="https://discord.gg/Jmxsd5f2jp" target="_blank">
-            <Button className="h-8 rounded-lg" variant={"outline"}>
-              <LogoIcons.discord className="w-6 h-6" />
-              <span className="hidden md:block">Join Us</span>
-            </Button>
-          </Link>
+          {/* Discord link removed */}
           <ModeToggle />
 
           {/* <Button
@@ -256,19 +252,9 @@ interface ResizeValue {
 
 const RESIZE_OPTIONS: ResizeOptionProps[] = [
   {
-    label: "16:9",
-    icon: "landscape",
-    description: "YouTube ads",
-    value: {
-      width: 1920,
-      height: 1080,
-      name: "16:9"
-    }
-  },
-  {
     label: "9:16",
     icon: "portrait",
-    description: "TikTok, YouTube Shorts",
+    description: "Instagram Reels, TikTok, YouTube Shorts",
     value: {
       width: 1080,
       height: 1920,
@@ -276,13 +262,33 @@ const RESIZE_OPTIONS: ResizeOptionProps[] = [
     }
   },
   {
+    label: "16:9",
+    icon: "landscape",
+    description: "LinkedIn, YouTube, Facebook",
+    value: {
+      width: 1920,
+      height: 1080,
+      name: "16:9"
+    }
+  },
+  {
     label: "1:1",
     icon: "square",
-    description: "Instagram, Facebook posts",
+    description: "Instagram Feed, Facebook Posts",
     value: {
       width: 1080,
       height: 1080,
       name: "1:1"
+    }
+  },
+  {
+    label: "4:5",
+    icon: "portrait",
+    description: "Instagram Portrait, Facebook Ads",
+    value: {
+      width: 1080,
+      height: 1350,
+      name: "4:5"
     }
   }
 ];

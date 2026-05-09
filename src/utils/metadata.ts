@@ -6,14 +6,14 @@ export function createMetadata(override: Metadata): Metadata {
     openGraph: {
       title: override.title ?? undefined,
       description: override.description ?? undefined,
-      url: "https://designcombo.dev",
+      url: "https://purebrain.ai",
       images: "/banner.png",
-      siteName: "Combo",
+      siteName: "PureBrain Video Editor",
       ...override.openGraph
     },
     twitter: {
       card: "summary_large_image",
-      creator: "@Combo",
+      creator: "@PureBrain",
       title: override.title ?? undefined,
       description: override.description ?? undefined,
       images: "/banner.png",
@@ -28,4 +28,4 @@ export function createMetadata(override: Metadata): Metadata {
 export const baseUrl =
   process.env.NODE_ENV === "development"
     ? new URL("http://localhost:3000")
-    : new URL("https://designcombo.dev");
+    : new URL("https://purebrain.ai");

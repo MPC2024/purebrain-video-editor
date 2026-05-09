@@ -6,7 +6,7 @@ import {
   BackgroundUploadRunner,
 } from "@/components/store-initializer";
 import { QueryProvider } from "@/components/query-provider";
-import { Analytics } from "@vercel/analytics/react";
+// import { Analytics } from "@vercel/analytics/react";
 import { Outfit } from "next/font/google";
 
 import "./globals.css";
@@ -31,10 +31,10 @@ const outfit = Outfit({
 
 export const metadata = createMetadata({
   title: {
-    template: "%s | Combo",
-    default: "Combo",
+    template: "%s | PureBrain Video Editor",
+    default: "PureBrain Video Editor",
   },
-  description: "AI Video generator for the next gen web.",
+  description: "Professional video editor for social content creation.",
   metadataBase: baseUrl,
 });
 
@@ -50,7 +50,7 @@ export default async function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
@@ -60,7 +60,7 @@ export default async function RootLayout({
             <BackgroundUploadRunner />
             <Toaster />
           </QueryProvider>
-          <Analytics />
+          {/* Analytics removed */}
         </ThemeProvider>
       </body>
     </html>
