@@ -11,6 +11,7 @@ import { Outfit } from "next/font/google";
 
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ServiceWorkerInit } from "@/components/service-worker-init";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -36,6 +37,14 @@ export const metadata = createMetadata({
   },
   description: "Professional video editor for social content creation.",
   metadataBase: baseUrl,
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "PureBrain Video Editor",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 });
 
 export default async function RootLayout({
@@ -45,6 +54,13 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#6366f1" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="PureBrain" />
+      </head>
       <body
         className={`${geistMono.variable} ${geist.variable} ${outfit.variable} antialiased font-sans bg-muted`}
       >
@@ -58,6 +74,7 @@ export default async function RootLayout({
             {children}
             <StoreInitializer />
             <BackgroundUploadRunner />
+            <ServiceWorkerInit />
             <Toaster />
           </QueryProvider>
           {/* Analytics removed */}

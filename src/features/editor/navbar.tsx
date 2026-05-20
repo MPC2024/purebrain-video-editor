@@ -34,6 +34,8 @@ import { LogoIcons } from "@/components/shared/logos";
 import Link from "next/link";
 import { ShortcutsModal } from "./shortcuts-modal";
 import { ModeToggle } from "@/components/ui/mode-toggle";
+import ShortcutsPanel from "./help/ShortcutsPanel";
+import SettingsPanel from "./settings/SettingsPanel";
 
 export default function Navbar({
   user,
@@ -132,14 +134,8 @@ export default function Navbar({
 
       <div className="flex h-13 items-center justify-end gap-2">
         <div className=" pointer-events-auto flex h-10 items-center gap-2 rounded-md px-2.5">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-muted-foreground hover:text-foreground"
-            onClick={() => setIsShortcutsModalOpen(true)}
-          >
-            <Keyboard className="size-5" />
-          </Button>
+          <ShortcutsPanel />
+          <SettingsPanel projectName={title} />
           {/* Discord link removed */}
           <ModeToggle />
 

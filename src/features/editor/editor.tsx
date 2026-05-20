@@ -43,6 +43,9 @@ import SmartCropPanel from "./tools/SmartCropPanel";
 import BrandKitPanel from "./brand/BrandKitPanel";
 import SpeedRampPanel from "./tools/SpeedRampPanel";
 import StickerBrowser from "./stickers/StickerBrowser";
+import WelcomeScreen from "./onboarding/WelcomeScreen";
+import SettingsPanel from "./settings/SettingsPanel";
+import ShortcutsPanel from "./help/ShortcutsPanel";
 
 const stateManager = new StateManager({
   size: {
@@ -211,8 +214,47 @@ const Editor = ({ tempId, id }: { tempId?: string; id?: string }) => {
     setLoaded(true);
   }, []);
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Only handle if not typing in an input field
+      const target = e.target as HTMLElement;
+      const isInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA';
+
+      if (isInput) return;
+
+      // Ctrl/Cmd + S: Save project
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        // Auto-save is handled by the project storage hook
+      }
+
+      // Ctrl/Cmd + E: Export
+      if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+        e.preventDefault();
+        // Trigger export modal
+      }
+
+      // ?: Help/Shortcuts
+      if (e.key === '?' && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+        e.preventDefault();
+        // ShortcutsPanel will handle this via Dialog
+      }
+
+      // Space: Play/Pause
+      if (e.key === ' ' && !isInput) {
+        e.preventDefault();
+        // Timeline player handles this
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <div className="flex h-screen w-screen flex-col">
+      <WelcomeScreen />
       <Navbar
         projectName={projectName}
         user={null}
