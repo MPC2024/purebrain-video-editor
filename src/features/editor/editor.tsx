@@ -30,6 +30,9 @@ import useLayoutStore from "./store/use-layout-store";
 import ControlItemHorizontal from "./control-item-horizontal";
 import { design } from "./mock";
 import { Separator } from "@/components/ui/separator";
+import { useIsMobile } from "@/hooks/use-mobile";
+import MobileTabBar from "@/components/mobile/MobileTabBar";
+import ExportModal from "./export/ExportModal";
 
 const stateManager = new StateManager({
   size: {
@@ -46,9 +49,11 @@ const SceneContainer = ({
   loaded,
   isLargeScreen,
 }: any) => {
+  const isMobile = useIsMobile(768)
+
   return (
-    <div className="relative flex h-full w-full flex-col bg-background">
-      <div className="flex-1 relative overflow-hidden w-full h-full">
+    <div className={`relative flex h-full w-full flex-col bg-background ${isMobile ? "pb-32" : ""}`}>
+      <div className={`flex-1 relative overflow-hidden w-full ${isMobile ? "h-1/2" : "h-full"}`}>
         <div className="flex h-full flex-1">
           <div className="flex-1 relative overflow-hidden w-full h-full">
             <CropModal />
@@ -57,12 +62,23 @@ const SceneContainer = ({
         </div>
       </div>
 
-      <div className="w-full">
+      <div className={`w-full ${isMobile ? "h-1/2" : ""}`}>
         {playerRef && <Timeline stateManager={stateManager} />}
       </div>
 
       {!isLargeScreen && !trackItem && loaded && <MenuListHorizontal />}
       {!isLargeScreen && trackItem && <ControlItemHorizontal />}
+
+      {/* Mobile Tab Bar - Only on mobile */}
+      {isMobile && loaded && (
+        <MobileTabBar
+          mediaContent={<MenuListHorizontal />}
+          textContent={<div className="text-sm text-muted-foreground">Text editing features coming soon</div>}
+          effectsContent={<div className="text-sm text-muted-foreground">Effects panel coming soon</div>}
+          audioContent={<div className="text-sm text-muted-foreground">Audio panel coming soon</div>}
+          exportContent={<ExportModal />}
+        />
+      )}
     </div>
   );
 };
