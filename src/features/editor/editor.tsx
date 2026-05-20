@@ -33,6 +33,10 @@ import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileTabBar from "@/components/mobile/MobileTabBar";
 import ExportModal from "./export/ExportModal";
+import EffectsPanel from "./effects/EffectsPanel";
+import AudioMixerPanel from "./audio/AudioMixerPanel";
+import KeyframePanel from "./animation/KeyframePanel";
+import TemplateBrowser from "./templates/TemplateBrowser";
 
 const stateManager = new StateManager({
   size: {
@@ -74,9 +78,11 @@ const SceneContainer = ({
         <MobileTabBar
           mediaContent={<MenuListHorizontal />}
           textContent={<div className="text-sm text-muted-foreground">Text editing features coming soon</div>}
-          effectsContent={<div className="text-sm text-muted-foreground">Effects panel coming soon</div>}
-          audioContent={<div className="text-sm text-muted-foreground">Audio panel coming soon</div>}
+          effectsContent={<EffectsPanel />}
+          audioContent={<AudioMixerPanel />}
           exportContent={<ExportModal />}
+          animationContent={<KeyframePanel />}
+          templateContent={<TemplateBrowser />}
         />
       )}
     </div>

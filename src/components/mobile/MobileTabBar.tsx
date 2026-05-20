@@ -7,6 +7,8 @@ import {
   Wand2,
   Music,
   Download,
+  Zap,
+  Film,
 } from "lucide-react"
 import BottomSheet from "./BottomSheet"
 import { motion } from "framer-motion"
@@ -17,14 +19,18 @@ interface MobileTabBarProps {
   onEffectsClick?: () => void
   onAudioClick?: () => void
   onExportClick?: () => void
+  onAnimationClick?: () => void
+  onTemplateClick?: () => void
   mediaContent?: React.ReactNode
   textContent?: React.ReactNode
   effectsContent?: React.ReactNode
   audioContent?: React.ReactNode
   exportContent?: React.ReactNode
+  animationContent?: React.ReactNode
+  templateContent?: React.ReactNode
 }
 
-type TabType = "media" | "text" | "effects" | "audio" | "export" | null
+type TabType = "media" | "text" | "effects" | "audio" | "export" | "animation" | "template" | null
 
 const MobileTabBar = ({
   onMediaClick,
@@ -32,11 +38,15 @@ const MobileTabBar = ({
   onEffectsClick,
   onAudioClick,
   onExportClick,
+  onAnimationClick,
+  onTemplateClick,
   mediaContent,
   textContent,
   effectsContent,
   audioContent,
   exportContent,
+  animationContent,
+  templateContent,
 }: MobileTabBarProps) => {
   const [activeTab, setActiveTab] = useState<TabType>(null)
 
@@ -45,6 +55,8 @@ const MobileTabBar = ({
     { id: "text", label: "Text", icon: Type, content: textContent, onClick: onTextClick },
     { id: "effects", label: "Effects", icon: Wand2, content: effectsContent, onClick: onEffectsClick },
     { id: "audio", label: "Audio", icon: Music, content: audioContent, onClick: onAudioClick },
+    { id: "animation", label: "Animate", icon: Zap, content: animationContent, onClick: onAnimationClick },
+    { id: "template", label: "Templates", icon: Film, content: templateContent, onClick: onTemplateClick },
     { id: "export", label: "Export", icon: Download, content: exportContent, onClick: onExportClick },
   ]
 
@@ -62,11 +74,11 @@ const MobileTabBar = ({
 
   return (
     <>
-      {/* Fixed Tab Bar */}
+      {/* Fixed Tab Bar - Scrollable */}
       <motion.div
         initial={{ y: 100 }}
         animate={{ y: 0 }}
-        className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-950 border-t border-border/50 px-2 py-2 flex justify-around gap-1 z-40 safe-bottom"
+        className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-950 border-t border-border/50 px-1 py-2 overflow-x-auto flex gap-1 z-40 safe-bottom scrollbar-hide"
       >
         {tabs.map((tab) => {
           const Icon = tab.icon
@@ -76,14 +88,14 @@ const MobileTabBar = ({
             <button
               key={tab.id}
               onClick={() => handleTabClick(tab.id as TabType)}
-              className={`flex flex-col items-center justify-center gap-1 p-3 rounded-lg transition-all flex-1 min-h-[60px] ${
+              className={`flex flex-col items-center justify-center gap-1 p-2 rounded-lg transition-all flex-shrink-0 min-h-[60px] min-w-[60px] ${
                 isActive
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:bg-muted"
               }`}
             >
-              <Icon size={24} strokeWidth={1.5} />
-              <span className="text-xs font-medium">{tab.label}</span>
+              <Icon size={20} strokeWidth={1.5} />
+              <span className="text-xs font-medium text-center">{tab.label}</span>
             </button>
           )
         })}
