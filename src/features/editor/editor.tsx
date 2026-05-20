@@ -37,6 +37,12 @@ import EffectsPanel from "./effects/EffectsPanel";
 import AudioMixerPanel from "./audio/AudioMixerPanel";
 import KeyframePanel from "./animation/KeyframePanel";
 import TemplateBrowser from "./templates/TemplateBrowser";
+import MusicBrowser from "./media/MusicBrowser";
+import SoundEffects from "./media/SoundEffects";
+import SmartCropPanel from "./tools/SmartCropPanel";
+import BrandKitPanel from "./brand/BrandKitPanel";
+import SpeedRampPanel from "./tools/SpeedRampPanel";
+import StickerBrowser from "./stickers/StickerBrowser";
 
 const stateManager = new StateManager({
   size: {
@@ -85,6 +91,16 @@ const SceneContainer = ({
           templateContent={<TemplateBrowser />}
         />
       )}
+
+      {/* Phase 3 Features - New Panels (hidden by default, ready to integrate) */}
+      <div className="hidden">
+        <MusicBrowser />
+        <SoundEffects />
+        <SmartCropPanel />
+        <BrandKitPanel />
+        <SpeedRampPanel />
+        <StickerBrowser />
+      </div>
     </div>
   );
 };
