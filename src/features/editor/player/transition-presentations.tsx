@@ -29,35 +29,35 @@ export const Transitions: Record<
   none: ({ id }: TransitionOptions) => (
     <TransitionSeries.Transition
       key={id}
-      presentation={fade()}
+      presentation={fade() as any}
       timing={linearTiming({ durationInFrames: 1 })}
     />
   ),
   fade: ({ durationInFrames, id }: TransitionOptions) => (
     <TransitionSeries.Transition
       key={id}
-      presentation={fade()}
+      presentation={fade() as any}
       timing={linearTiming({ durationInFrames })}
     />
   ),
   slide: ({ durationInFrames, id, direction }: TransitionOptions) => (
     <TransitionSeries.Transition
       key={id}
-      presentation={slide({ direction: direction })}
+      presentation={slide({ direction: direction }) as any}
       timing={linearTiming({ durationInFrames })}
     />
   ),
   wipe: ({ durationInFrames, id, direction }: TransitionOptions) => (
     <TransitionSeries.Transition
       key={id}
-      presentation={wipe({ direction: direction })}
+      presentation={wipe({ direction: direction }) as any}
       timing={linearTiming({ durationInFrames })}
     />
   ),
   flip: ({ durationInFrames, id }: TransitionOptions) => (
     <TransitionSeries.Transition
       key={id}
-      presentation={flip()}
+      presentation={flip() as any}
       timing={linearTiming({ durationInFrames })}
     />
   ),
@@ -65,14 +65,14 @@ export const Transitions: Record<
   clockWipe: ({ width, height, durationInFrames, id }: TransitionOptions) => (
     <TransitionSeries.Transition
       key={id}
-      presentation={clockWipe({ width, height })}
+      presentation={clockWipe({ width, height }) as any}
       timing={linearTiming({ durationInFrames })}
     />
   ),
   star: ({ width, height, durationInFrames, id }: TransitionOptions) => (
     <TransitionSeries.Transition
       key={id}
-      presentation={star({ width, height })}
+      presentation={star({ width, height }) as any}
       timing={linearTiming({ durationInFrames })}
     />
   ),
@@ -80,7 +80,7 @@ export const Transitions: Record<
     return (
       <TransitionSeries.Transition
         key={id}
-        presentation={circle({ width, height })}
+        presentation={circle({ width, height }) as any}
         timing={linearTiming({ durationInFrames })}
       />
     );
@@ -88,7 +88,7 @@ export const Transitions: Record<
   rectangle: ({ width, height, durationInFrames, id }: TransitionOptions) => (
     <TransitionSeries.Transition
       key={id}
-      presentation={rectangle({ width, height })}
+      presentation={rectangle({ width, height }) as any}
       timing={linearTiming({ durationInFrames })}
     />
   ),
@@ -100,7 +100,7 @@ export const Transitions: Record<
   }: TransitionOptions) => (
     <TransitionSeries.Transition
       key={id}
-      presentation={slidingDoors({ width, height })}
+      presentation={slidingDoors({ width, height }) as any}
       timing={linearTiming({ durationInFrames })}
     />
   )
