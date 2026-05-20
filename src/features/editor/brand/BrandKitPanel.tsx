@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Plus, X, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,6 +18,7 @@ interface BrandKitPanelProps {
 }
 
 const BrandKitPanel = ({ onSave, onApply }: BrandKitPanelProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [brandName, setBrandName] = useState('My Brand');
   const [colors, setColors] = useState<string[]>(DEFAULT_BRAND_COLORS);
   const [selectedFonts, setSelectedFonts] = useState<BrandFont[]>([]);
@@ -59,6 +60,18 @@ const BrandKitPanel = ({ onSave, onApply }: BrandKitPanelProps) => {
 
   const handleRemoveFont = (fontName: string) => {
     setSelectedFonts(selectedFonts.filter((f) => f.name !== fontName));
+  };
+
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const result = ev.target?.result as string;
+        setLogoUrl(result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSaveBrandKit = () => {
@@ -267,7 +280,10 @@ const BrandKitPanel = ({ onSave, onApply }: BrandKitPanelProps) => {
                 <label className="text-xs font-medium text-muted-foreground">
                   Upload Logo
                 </label>
-                <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className="border-2 border-dashed border-border rounded-lg p-6 text-center cursor-pointer hover:bg-muted/50 transition-colors"
+                >
                   <Upload className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
                   <p className="text-sm text-muted-foreground">
                     Tap to upload a logo image
@@ -276,6 +292,13 @@ const BrandKitPanel = ({ onSave, onApply }: BrandKitPanelProps) => {
                     PNG, JPG, or SVG
                   </p>
                 </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleLogoUpload}
+                  style={{ display: 'none' }}
+                />
               </div>
             )}
           </div>

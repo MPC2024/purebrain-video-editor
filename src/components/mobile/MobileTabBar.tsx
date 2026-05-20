@@ -9,6 +9,7 @@ import {
   Download,
   Zap,
   Film,
+  Settings,
 } from "lucide-react"
 import BottomSheet from "./BottomSheet"
 import { motion } from "framer-motion"
@@ -21,6 +22,8 @@ interface MobileTabBarProps {
   onExportClick?: () => void
   onAnimationClick?: () => void
   onTemplateClick?: () => void
+  onSettingsClick?: () => void
+  onBrandKitClick?: () => void
   mediaContent?: React.ReactNode
   textContent?: React.ReactNode
   effectsContent?: React.ReactNode
@@ -28,9 +31,18 @@ interface MobileTabBarProps {
   exportContent?: React.ReactNode
   animationContent?: React.ReactNode
   templateContent?: React.ReactNode
+  musicContent?: React.ReactNode
+  soundFxContent?: React.ReactNode
+  stickerContent?: React.ReactNode
+  cropContent?: React.ReactNode
+  speedContent?: React.ReactNode
+  brandKitContent?: React.ReactNode
+  settingsContent?: React.ReactNode
 }
 
-type TabType = "media" | "text" | "effects" | "audio" | "export" | "animation" | "template" | null
+type TabType = "media" | "text" | "effects" | "audio" | "export" | "animation" | "template" | "settings" | "brandkit" | null
+type MediaSubTabType = "videos" | "music" | "soundfx" | null
+type EffectsSubTabType = "filters" | "stickers" | "speed" | "crop" | null
 
 const MobileTabBar = ({
   onMediaClick,
@@ -40,6 +52,8 @@ const MobileTabBar = ({
   onExportClick,
   onAnimationClick,
   onTemplateClick,
+  onSettingsClick,
+  onBrandKitClick,
   mediaContent,
   textContent,
   effectsContent,
@@ -47,17 +61,28 @@ const MobileTabBar = ({
   exportContent,
   animationContent,
   templateContent,
+  musicContent,
+  soundFxContent,
+  stickerContent,
+  cropContent,
+  speedContent,
+  brandKitContent,
+  settingsContent,
 }: MobileTabBarProps) => {
   const [activeTab, setActiveTab] = useState<TabType>(null)
+  const [mediaSubTab, setMediaSubTab] = useState<MediaSubTabType>("videos")
+  const [effectsSubTab, setEffectsSubTab] = useState<EffectsSubTabType>("filters")
 
   const tabs = [
-    { id: "media", label: "Media", icon: FileImage, content: mediaContent, onClick: onMediaClick },
+    { id: "media", label: "Media", icon: FileImage, onClick: onMediaClick },
     { id: "text", label: "Text", icon: Type, content: textContent, onClick: onTextClick },
-    { id: "effects", label: "Effects", icon: Wand2, content: effectsContent, onClick: onEffectsClick },
+    { id: "effects", label: "Effects", icon: Wand2, onClick: onEffectsClick },
     { id: "audio", label: "Audio", icon: Music, content: audioContent, onClick: onAudioClick },
     { id: "animation", label: "Animate", icon: Zap, content: animationContent, onClick: onAnimationClick },
     { id: "template", label: "Templates", icon: Film, content: templateContent, onClick: onTemplateClick },
     { id: "export", label: "Export", icon: Download, content: exportContent, onClick: onExportClick },
+    { id: "brandkit", label: "Brand Kit", icon: Settings, onClick: onBrandKitClick },
+    { id: "settings", label: "Settings", icon: Settings, content: settingsContent, onClick: onSettingsClick },
   ]
 
   const handleTabClick = (tabId: TabType) => {
@@ -71,6 +96,103 @@ const MobileTabBar = ({
   }
 
   const activeTabData = tabs.find((t) => t.id === activeTab)
+
+  // Helper to render tab content with sub-tabs for Media
+  const renderMediaContent = () => (
+    <div className="flex flex-col h-full">
+      <div className="flex gap-2 px-4 py-3 border-b border-border">
+        <button
+          onClick={() => setMediaSubTab("videos")}
+          className={`px-3 py-1 rounded text-xs font-medium transition-all ${
+            mediaSubTab === "videos"
+              ? "bg-primary text-primary-foreground"
+              : "bg-muted text-muted-foreground hover:bg-muted/80"
+          }`}
+        >
+          Videos/Photos
+        </button>
+        <button
+          onClick={() => setMediaSubTab("music")}
+          className={`px-3 py-1 rounded text-xs font-medium transition-all ${
+            mediaSubTab === "music"
+              ? "bg-primary text-primary-foreground"
+              : "bg-muted text-muted-foreground hover:bg-muted/80"
+          }`}
+        >
+          Music
+        </button>
+        <button
+          onClick={() => setMediaSubTab("soundfx")}
+          className={`px-3 py-1 rounded text-xs font-medium transition-all ${
+            mediaSubTab === "soundfx"
+              ? "bg-primary text-primary-foreground"
+              : "bg-muted text-muted-foreground hover:bg-muted/80"
+          }`}
+        >
+          Sound FX
+        </button>
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        {mediaSubTab === "videos" && mediaContent}
+        {mediaSubTab === "music" && musicContent}
+        {mediaSubTab === "soundfx" && soundFxContent}
+      </div>
+    </div>
+  )
+
+  // Helper to render tab content with sub-tabs for Effects
+  const renderEffectsContent = () => (
+    <div className="flex flex-col h-full">
+      <div className="flex gap-2 px-4 py-3 border-b border-border overflow-x-auto">
+        <button
+          onClick={() => setEffectsSubTab("filters")}
+          className={`px-3 py-1 rounded text-xs font-medium transition-all whitespace-nowrap ${
+            effectsSubTab === "filters"
+              ? "bg-primary text-primary-foreground"
+              : "bg-muted text-muted-foreground hover:bg-muted/80"
+          }`}
+        >
+          Filters
+        </button>
+        <button
+          onClick={() => setEffectsSubTab("stickers")}
+          className={`px-3 py-1 rounded text-xs font-medium transition-all whitespace-nowrap ${
+            effectsSubTab === "stickers"
+              ? "bg-primary text-primary-foreground"
+              : "bg-muted text-muted-foreground hover:bg-muted/80"
+          }`}
+        >
+          Stickers
+        </button>
+        <button
+          onClick={() => setEffectsSubTab("speed")}
+          className={`px-3 py-1 rounded text-xs font-medium transition-all whitespace-nowrap ${
+            effectsSubTab === "speed"
+              ? "bg-primary text-primary-foreground"
+              : "bg-muted text-muted-foreground hover:bg-muted/80"
+          }`}
+        >
+          Speed
+        </button>
+        <button
+          onClick={() => setEffectsSubTab("crop")}
+          className={`px-3 py-1 rounded text-xs font-medium transition-all whitespace-nowrap ${
+            effectsSubTab === "crop"
+              ? "bg-primary text-primary-foreground"
+              : "bg-muted text-muted-foreground hover:bg-muted/80"
+          }`}
+        >
+          Crop
+        </button>
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        {effectsSubTab === "filters" && effectsContent}
+        {effectsSubTab === "stickers" && stickerContent}
+        {effectsSubTab === "speed" && speedContent}
+        {effectsSubTab === "crop" && cropContent}
+      </div>
+    </div>
+  )
 
   return (
     <>
@@ -107,7 +229,11 @@ const MobileTabBar = ({
         onClose={() => setActiveTab(null)}
         title={activeTabData?.label}
       >
-        {activeTabData?.content}
+        {activeTab === "media" && renderMediaContent()}
+        {activeTab === "effects" && renderEffectsContent()}
+        {activeTab === "brandkit" && brandKitContent}
+        {activeTab === "settings" && settingsContent}
+        {activeTab !== "media" && activeTab !== "effects" && activeTab !== "brandkit" && activeTab !== "settings" && activeTabData?.content}
       </BottomSheet>
     </>
   )

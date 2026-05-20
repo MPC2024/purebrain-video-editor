@@ -86,24 +86,21 @@ const SceneContainer = ({
       {isMobile && loaded && (
         <MobileTabBar
           mediaContent={<MenuListHorizontal />}
+          musicContent={<MusicBrowser />}
+          soundFxContent={<SoundEffects />}
           textContent={<div className="text-sm text-muted-foreground">Text editing features coming soon</div>}
           effectsContent={<EffectsPanel />}
+          stickerContent={<StickerBrowser />}
+          speedContent={<SpeedRampPanel />}
+          cropContent={<SmartCropPanel />}
           audioContent={<AudioMixerPanel />}
           exportContent={<ExportModal />}
           animationContent={<KeyframePanel />}
           templateContent={<TemplateBrowser />}
+          brandKitContent={<BrandKitPanel />}
+          settingsContent={<SettingsPanel />}
         />
       )}
-
-      {/* Phase 3 Features - New Panels (hidden by default, ready to integrate) */}
-      <div className="hidden">
-        <MusicBrowser />
-        <SoundEffects />
-        <SmartCropPanel />
-        <BrandKitPanel />
-        <SpeedRampPanel />
-        <StickerBrowser />
-      </div>
     </div>
   );
 };
