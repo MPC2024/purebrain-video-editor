@@ -10,6 +10,7 @@ import {
   Zap,
   Film,
   Settings,
+  Image,
 } from "lucide-react"
 import BottomSheet from "./BottomSheet"
 import { motion } from "framer-motion"
@@ -24,6 +25,7 @@ interface MobileTabBarProps {
   onTemplateClick?: () => void
   onSettingsClick?: () => void
   onBrandKitClick?: () => void
+  onThumbnailClick?: () => void
   mediaContent?: React.ReactNode
   textContent?: React.ReactNode
   effectsContent?: React.ReactNode
@@ -38,9 +40,10 @@ interface MobileTabBarProps {
   speedContent?: React.ReactNode
   brandKitContent?: React.ReactNode
   settingsContent?: React.ReactNode
+  thumbnailContent?: React.ReactNode
 }
 
-type TabType = "media" | "text" | "effects" | "audio" | "export" | "animation" | "template" | "settings" | "brandkit" | null
+type TabType = "media" | "text" | "effects" | "audio" | "export" | "animation" | "template" | "settings" | "brandkit" | "thumbnail" | null
 type MediaSubTabType = "videos" | "music" | "soundfx" | null
 type EffectsSubTabType = "filters" | "stickers" | "speed" | "crop" | null
 
@@ -54,6 +57,7 @@ const MobileTabBar = ({
   onTemplateClick,
   onSettingsClick,
   onBrandKitClick,
+  onThumbnailClick,
   mediaContent,
   textContent,
   effectsContent,
@@ -68,6 +72,7 @@ const MobileTabBar = ({
   speedContent,
   brandKitContent,
   settingsContent,
+  thumbnailContent,
 }: MobileTabBarProps) => {
   const [activeTab, setActiveTab] = useState<TabType>(null)
   const [mediaSubTab, setMediaSubTab] = useState<MediaSubTabType>("videos")
@@ -80,6 +85,7 @@ const MobileTabBar = ({
     { id: "audio", label: "Audio", icon: Music, content: audioContent, onClick: onAudioClick },
     { id: "animation", label: "Animate", icon: Zap, content: animationContent, onClick: onAnimationClick },
     { id: "template", label: "Templates", icon: Film, content: templateContent, onClick: onTemplateClick },
+    { id: "thumbnail", label: "Thumbnail", icon: Image, content: thumbnailContent, onClick: onThumbnailClick },
     { id: "export", label: "Export", icon: Download, content: exportContent, onClick: onExportClick },
     { id: "brandkit", label: "Brand Kit", icon: Settings, onClick: onBrandKitClick },
     { id: "settings", label: "Settings", icon: Settings, content: settingsContent, onClick: onSettingsClick },
@@ -231,9 +237,10 @@ const MobileTabBar = ({
       >
         {activeTab === "media" && renderMediaContent()}
         {activeTab === "effects" && renderEffectsContent()}
+        {activeTab === "thumbnail" && thumbnailContent}
         {activeTab === "brandkit" && brandKitContent}
         {activeTab === "settings" && settingsContent}
-        {activeTab !== "media" && activeTab !== "effects" && activeTab !== "brandkit" && activeTab !== "settings" && activeTabData?.content}
+        {activeTab !== "media" && activeTab !== "effects" && activeTab !== "thumbnail" && activeTab !== "brandkit" && activeTab !== "settings" && activeTabData?.content}
       </BottomSheet>
     </>
   )

@@ -46,6 +46,7 @@ import StickerBrowser from "./stickers/StickerBrowser";
 import WelcomeScreen from "./onboarding/WelcomeScreen";
 import SettingsPanel from "./settings/SettingsPanel";
 import ShortcutsPanel from "./help/ShortcutsPanel";
+import ThumbnailCreator from "./thumbnail/ThumbnailCreator";
 
 const stateManager = new StateManager({
   size: {
@@ -99,6 +100,7 @@ const SceneContainer = ({
           templateContent={<TemplateBrowser />}
           brandKitContent={<BrandKitPanel />}
           settingsContent={<SettingsPanel />}
+          thumbnailContent={<ThumbnailCreator />}
         />
       )}
     </div>
