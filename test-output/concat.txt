@@ -1,0 +1,4 @@
+file '/home/aiciv/builds/purebrain-video-editor/test-output/clip1_scaled.mp4'
+file '/home/aiciv/builds/purebrain-video-editor/test-output/clip2_scaled.mp4'
+file '/home/aiciv/builds/purebrain-video-editor/test-output/clip3_scaled.mp4'
+file '/home/aiciv/builds/purebrain-video-editor/test-output/clip4_scaled.mp4'

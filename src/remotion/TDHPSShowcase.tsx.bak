@@ -1,0 +1,308 @@
+import {
+	AbsoluteFill,
+	Video,
+	Sequence,
+	useCurrentFrame,
+	useVideoConfig,
+	interpolate,
+	spring,
+	Easing,
+	Img,
+} from 'remotion'
+import React from 'react'
+
+// Brand colors
+const BRAND_PINK = '#965B83'
+const ACCENT_PINK = '#CC3366'
+const DARK_BG = '#1A1A1A'
+const WHITE = '#FFFFFF'
+
+interface VideoClipProps {
+	src: string
+	startFrom?: number
+}
+
+interface CaptionOverlayProps {
+	text: string
+	position?: 'top' | 'bottom' | 'center'
+	delay?: number
+}
+
+interface SlowZoomProps {
+	scale?: number
+}
+
+// VideoClip component - renders video with warm color filter
+const VideoClip: React.FC<VideoClipProps> = ({ src, startFrom = 0 }) => {
+	return (
+		<AbsoluteFill
+			style={{
+				filter: 'brightness(1.04) contrast(1.12) saturate(1.2)',
+			}}
+		>
+			<Video
+				src={src}
+				style={{
+					width: '100%',
+					height: '100%',
+					objectFit: 'cover',
+				}}
+			/>
+		</AbsoluteFill>
+	)
+}
+
+// FadeIn animation
+interface FadeInProps {
+	duration?: number
+}
+
+const FadeIn: React.FC<FadeInProps> = ({ duration = 15 }) => {
+	const frame = useCurrentFrame()
+	const opacity = interpolate(frame, [0, duration], [0, 1], { extrapolateLeft: 'clamp' })
+
+	return (
+		<AbsoluteFill
+			style={{
+				backgroundColor: 'rgba(0, 0, 0, 1)',
+				opacity: 1 - opacity,
+				pointerEvents: 'none',
+			}}
+		/>
+	)
+}
+
+// CaptionOverlay component - animated text captions
+const CaptionOverlay: React.FC<CaptionOverlayProps> = ({
+	text,
+	position = 'bottom',
+	delay = 0,
+}) => {
+	const frame = useCurrentFrame()
+	const { fps } = useVideoConfig()
+	const delayFrames = delay * fps
+
+	// Calculate opacity fade (start at delay, fade in over 15 frames, hold, fade out at end)
+	const opacity = interpolate(
+		frame,
+		[delayFrames, delayFrames + 15, delayFrames + 150, delayFrames + 165],
+		[0, 1, 1, 0],
+		{
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	)
+
+	// Slide up animation
+	const translateY = interpolate(frame, [delayFrames, delayFrames + 15], [60, 0], {
+		extrapolateLeft: 'clamp',
+		easing: Easing.out(Easing.cubic),
+	})
+
+	const positionMap = {
+		top: { top: 80, bottom: 'auto' },
+		bottom: { bottom: 100, top: 'auto' },
+		center: { top: '50%', transform: 'translateY(-50%)' },
+	}
+
+	return (
+		<AbsoluteFill
+			style={{
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
+				opacity,
+				...positionMap[position],
+			}}
+		>
+			<div
+				style={{
+					backgroundColor: 'rgba(0, 0, 0, 0.6)',
+					padding: '16px 32px',
+					borderRadius: '8px',
+					maxWidth: '90%',
+					transform: `translateY(${translateY}px)`,
+				}}
+			>
+				<Text
+					style={{
+						fontSize: 36,
+						fontWeight: 'bold',
+						fontFamily: 'Outfit, sans-serif',
+						color: WHITE,
+						textAlign: 'center',
+						lineHeight: '1.4',
+					}}
+				>
+					{text}
+				</Text>
+			</div>
+		</AbsoluteFill>
+	)
+}
+
+// SlowZoom component - Ken Burns style subtle zoom
+const SlowZoom: React.FC<SlowZoomProps> = ({ scale = 1.08 }) => {
+	const frame = useCurrentFrame()
+	const { durationInFrames } = useVideoConfig()
+
+	const currentScale = interpolate(frame, [0, durationInFrames], [1, scale], {
+		extrapolateRight: 'clamp',
+	})
+
+	return (
+		<AbsoluteFill
+			style={{
+				transform: `scale(${currentScale})`,
+				transformOrigin: 'center center',
+			}}
+		>
+			<VideoClip src="/raw-clips/clip4.mov" />
+		</AbsoluteFill>
+	)
+}
+
+// BrandOutro component - TDHPS branded end card
+const BrandOutro: React.FC = () => {
+	const frame = useCurrentFrame()
+	const { durationInFrames } = useVideoConfig()
+
+	const scaleSpring = spring({
+		frame,
+		fps: 30,
+		config: {
+			damping: 10,
+			mass: 1,
+			overshootClamping: true,
+		},
+	})
+
+	const scale = interpolate(scaleSpring, [0, 1], [0.8, 1])
+	const opacity = interpolate(frame, [0, 15], [0, 1], {
+		extrapolateRight: 'clamp',
+	})
+
+	return (
+		<AbsoluteFill
+			style={{
+				background: `linear-gradient(135deg, ${BRAND_PINK} 0%, ${ACCENT_PINK} 100%)`,
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				justifyContent: 'center',
+				opacity,
+			}}
+		>
+			<div
+				style={{
+					textAlign: 'center',
+					transform: `scale(${scale})`,
+				}}
+			>
+				<h1
+					style={{
+						fontSize: 64,
+						fontWeight: 'bold',
+						fontFamily: 'Bowlby One SC, sans-serif',
+						color: WHITE,
+						margin: '0 0 24px 0',
+						letterSpacing: '-1px',
+					}}
+				>
+					The Dog House
+				</h1>
+				<h2
+					style={{
+						fontSize: 48,
+						fontWeight: 'bold',
+						fontFamily: 'Bowlby One SC, sans-serif',
+						color: WHITE,
+						margin: '0 0 32px 0',
+						letterSpacing: '-0.5px',
+					}}
+				>
+					Pet Salon
+				</h2>
+				<p
+					style={{
+						fontSize: 24,
+						fontFamily: 'Outfit, sans-serif',
+						color: WHITE,
+						margin: 0,
+						fontWeight: '500',
+					}}
+				>
+					Book your pet's appointment today
+				</p>
+			</div>
+		</AbsoluteFill>
+	)
+}
+
+// LowerThirdBar - persistent brand watermark
+const LowerThirdBar: React.FC = () => {
+	return (
+		<AbsoluteFill
+			style={{
+				display: 'flex',
+				alignItems: 'flex-end',
+				justifyContent: 'flex-end',
+				padding: '20px',
+				pointerEvents: 'none',
+			}}
+		>
+			<Text
+				style={{
+					fontSize: 16,
+					fontFamily: 'Outfit, sans-serif',
+					color: BRAND_PINK,
+					opacity: 0.5,
+					fontWeight: '600',
+				}}
+			>
+				TDHPS
+			</Text>
+		</AbsoluteFill>
+	)
+}
+
+// Main composition
+export const TDHPSShowcase: React.FC = () => {
+	const { fps } = useVideoConfig()
+
+	return (
+		<AbsoluteFill style={{ backgroundColor: DARK_BG }}>
+			{/* Clip 1: 0-5 seconds with fade in */}
+			<Sequence from={0} durationInFrames={5 * fps}>
+				<VideoClip src="/raw-clips/clip1.mov" />
+				<FadeIn duration={15} />
+				<CaptionOverlay text="Your pet's home away from home" position="bottom" delay={1} />
+			</Sequence>
+
+			{/* Clip 2: 5-9 seconds */}
+			<Sequence from={5 * fps} durationInFrames={4 * fps}>
+				<VideoClip src="/raw-clips/clip2.mov" />
+				<CaptionOverlay text="Professional care they deserve" position="bottom" delay={0.5} />
+			</Sequence>
+
+			{/* Clip 3: 9-13 seconds */}
+			<Sequence from={9 * fps} durationInFrames={4 * fps}>
+				<VideoClip src="/raw-clips/clip3.mov" />
+				<CaptionOverlay text="Where every pet is family" position="bottom" delay={0.5} />
+			</Sequence>
+
+			{/* Clip 4: 13-17 seconds with slow zoom */}
+			<Sequence from={13 * fps} durationInFrames={4 * fps}>
+				<SlowZoom scale={1.08} />
+			</Sequence>
+
+			{/* Brand Outro: 17-20 seconds */}
+			<Sequence from={17 * fps} durationInFrames={3 * fps}>
+				<BrandOutro />
+			</Sequence>
+
+			{/* Persistent lower third brand bar */}
+			<LowerThirdBar />
+		</AbsoluteFill>
+	)
+}

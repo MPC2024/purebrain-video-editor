@@ -71,15 +71,33 @@ const EXPORT_PRESETS: ExportPreset[] = [
 ]
 
 type QualityLevel = "low" | "medium" | "high"
+type CaptionStyle = "classic" | "bold_pop" | "karaoke" | "lower_third" | "minimal" | "highlight" | "subtitle" | "centered_title"
+type BrandKit = "tdhps" | "mpc" | "pawops" | "none"
 
 interface ExportModalProps {
   onExport?: (preset: ExportPreset, quality: QualityLevel) => void
   isExporting?: boolean
 }
 
+const CAPTION_STYLES: CaptionStyle[] = [
+  "classic",
+  "bold_pop",
+  "karaoke",
+  "lower_third",
+  "minimal",
+  "highlight",
+  "subtitle",
+  "centered_title"
+]
+
+const BRAND_KITS: BrandKit[] = ["tdhps", "mpc", "pawops", "none"]
+
 const ExportModal = ({ onExport, isExporting = false }: ExportModalProps) => {
   const [selectedPreset, setSelectedPreset] = useState<string>("youtube")
   const [quality, setQuality] = useState<QualityLevel>("medium")
+  const [captionStyle, setCaptionStyle] = useState<CaptionStyle>("classic")
+  const [brandKit, setBrandKit] = useState<BrandKit>("none")
+  const [captionText, setCaptionText] = useState<string>("")
 
   const preset = EXPORT_PRESETS.find((p) => p.id === selectedPreset)
 
@@ -141,6 +159,61 @@ const ExportModal = ({ onExport, isExporting = false }: ExportModalProps) => {
         </Select>
       </div>
 
+      {/* Brand Kit Selection */}
+      <div>
+        <Label htmlFor="brandkit" className="text-base font-semibold mb-3 block">
+          Brand Kit
+        </Label>
+        <Select value={brandKit} onValueChange={(value: any) => setBrandKit(value)}>
+          <SelectTrigger className="h-10">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {BRAND_KITS.map((kit) => (
+              <SelectItem key={kit} value={kit}>
+                {kit === "none" ? "None" : kit.toUpperCase()}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Caption Style Selection */}
+      <div>
+        <Label htmlFor="captionstyle" className="text-base font-semibold mb-3 block">
+          Caption Style
+        </Label>
+        <Select value={captionStyle} onValueChange={(value: any) => setCaptionStyle(value)}>
+          <SelectTrigger className="h-10">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {CAPTION_STYLES.map((style) => (
+              <SelectItem key={style} value={style}>
+                {style
+                  .split("_")
+                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(" ")}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Caption Text */}
+      <div>
+        <Label htmlFor="captiontext" className="text-base font-semibold mb-3 block">
+          Caption Text (Optional)
+        </Label>
+        <textarea
+          id="captiontext"
+          placeholder="Enter caption text or leave blank..."
+          value={captionText}
+          onChange={(e) => setCaptionText(e.target.value)}
+          className="w-full h-20 p-3 rounded-lg border border-border bg-muted/50 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+        />
+      </div>
+
       {/* Preview */}
       {preset && (
         <motion.div
@@ -165,6 +238,8 @@ const ExportModal = ({ onExport, isExporting = false }: ExportModalProps) => {
             <p>Resolution: {preset.width}x{preset.height}</p>
             <p>Quality: {qualityOptions[quality]}</p>
             <p>Frame Rate: {preset.fps} fps</p>
+            <p>Brand: {brandKit.toUpperCase()}</p>
+            <p>Caption Style: {captionStyle}</p>
           </div>
         </motion.div>
       )}

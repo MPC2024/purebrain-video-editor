@@ -13,6 +13,9 @@ interface DownloadState {
   output?: Output;
   payload?: IDesign;
   displayProgressModal: boolean;
+  captionText?: string;
+  captionStyle?: string;
+  brandKit?: string;
   actions: {
     setProjectId: (projectId: string) => void;
     setExporting: (exporting: boolean) => void;
@@ -33,6 +36,9 @@ export const useDownloadState = create<DownloadState>((set, get) => ({
   exportType: "mp4",
   progress: 0,
   displayProgressModal: false,
+  captionText: "",
+  captionStyle: "classic",
+  brandKit: "none",
   actions: {
     setProjectId: (projectId) => set({ projectId }),
     setExporting: (exporting) => set({ exporting }),
@@ -48,50 +54,80 @@ export const useDownloadState = create<DownloadState>((set, get) => ({
         set({ exporting: true, displayProgressModal: true });
 
         // Assume payload to be stored in the state for POST request
-        const { payload } = get();
+        const { payload, exportType, captionText, captionStyle, brandKit } =
+          get();
 
         if (!payload) throw new Error("Payload is not defined");
 
-        // Step 1: POST request to start rendering
-        const response = await fetch(`/api/render`, {
+        // Step 1: POST request to start local rendering
+        const response = await fetch(`/api/export`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
             design: payload,
-            options: {
-              fps: 30,
-              size: payload.size,
-              format: "mp4"
-            }
+            captionText: captionText || "",
+            captionStyle: captionStyle || "classic",
+            brandKit: brandKit || "none",
+            format: exportType,
+            quality: "medium",
+            width: payload.size?.width || 1920,
+            height: payload.size?.height || 1080,
+            fps: 30
           })
         });
 
-        if (!response.ok) throw new Error("Failed to submit export request.");
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(
+            errorData.error || "Failed to submit export request."
+          );
+        }
 
         const jobInfo = await response.json();
-        const jobId = jobInfo.render.id;
+        const jobId = jobInfo.jobId;
 
         // Step 2 & 3: Polling for status updates
         const checkStatus = async () => {
-          const statusResponse = await fetch(`/api/render/${jobId}`, {
-            headers: {
-              "Content-Type": "application/json"
+          try {
+            const statusResponse = await fetch(
+              `/api/export?jobId=${jobId}`,
+              {
+                headers: {
+                  "Content-Type": "application/json"
+                }
+              }
+            );
+
+            if (!statusResponse.ok)
+              throw new Error("Failed to fetch export status.");
+
+            const statusInfo = await statusResponse.json();
+            const { status, progress, downloadUrl } = statusInfo;
+
+            set({ progress: Math.round(progress) });
+
+            if (status === "complete") {
+              set({
+                exporting: false,
+                output: {
+                  url: downloadUrl || `/api/export/download/${jobId}`,
+                  type: exportType
+                }
+              });
+            } else if (
+              status === "processing" ||
+              status === "pending"
+            ) {
+              setTimeout(checkStatus, 2500);
+            } else if (status === "error") {
+              throw new Error(
+                statusInfo.errorMessage || "Export processing failed"
+              );
             }
-          });
-
-          if (!statusResponse.ok)
-            throw new Error("Failed to fetch export status.");
-
-          const statusInfo = await statusResponse.json();
-          const { status, progress, presigned_url: url } = statusInfo.render;
-
-          set({ progress });
-
-          if (status === "COMPLETED") {
-            set({ exporting: false, output: { url, type: get().exportType } });
-          } else if (status === "PROCESSING" || status === "PENDING") {
+          } catch (statusError) {
+            console.error("Status check error:", statusError);
             setTimeout(checkStatus, 2500);
           }
         };

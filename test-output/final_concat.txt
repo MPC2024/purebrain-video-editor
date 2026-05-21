@@ -1,0 +1,2 @@
+file '/home/aiciv/builds/purebrain-video-editor/test-output/main_video.mp4'
+file '/home/aiciv/builds/purebrain-video-editor/test-output/outro_video.mp4'
