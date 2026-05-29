@@ -66,17 +66,17 @@ const SceneContainer = ({
   const isMobile = useIsMobile(768)
 
   return (
-    <div className={`relative flex h-full w-full flex-col bg-background ${isMobile ? "pb-32" : ""}`}>
+    <div className={`relative flex h-full w-full flex-col bg-background shadow-inner ${isMobile ? "pb-32" : ""}`}>
       <div className={`flex-1 relative overflow-hidden w-full ${isMobile ? "h-1/2" : "h-full"}`}>
         <div className="flex h-full flex-1">
-          <div className="flex-1 relative overflow-hidden w-full h-full">
+          <div className="flex-1 relative overflow-hidden w-full h-full border-r border-border/30">
             <CropModal />
             <Scene ref={sceneRef} stateManager={stateManager} />
           </div>
         </div>
       </div>
 
-      <div className={`w-full ${isMobile ? "h-1/2" : ""}`}>
+      <div className={`w-full border-t border-border/30 ${isMobile ? "h-1/2" : ""}`}>
         {playerRef && <Timeline stateManager={stateManager} />}
       </div>
 
@@ -109,10 +109,10 @@ const SceneContainer = ({
 
 const Sidebar = () => {
   return (
-    <div className="bg-card w-full flex flex-none border-r border-border/80 h-[calc(100vh-52px)]">
+    <div className="bg-card w-full flex flex-none border-r border-border/60 h-[calc(100vh-52px)] shadow-sm">
       <div className="flex flex-col w-full">
         <MenuList />
-        <Separator orientation="horizontal" />
+        <Separator orientation="horizontal" className="bg-border/50" />
         <ControlItem />
       </div>
     </div>

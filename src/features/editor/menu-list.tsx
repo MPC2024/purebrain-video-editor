@@ -91,18 +91,18 @@ const MenuButton = memo<{
     <div
       onClick={handleClick}
       className={cn(
-        "flex items-center justify-center flex-none h-7.5 w-7.5 cursor-pointer rounded-sm transition-all duration-200",
+        "flex items-center justify-center flex-none h-8 w-8 cursor-pointer rounded-md transition-all duration-200 shadow-xs",
         isActive
-          ? "bg-white/10 text-white"
-          : "text-muted-foreground hover:bg-white/5 hover:text-white"
+          ? "bg-primary text-primary-foreground shadow-sm"
+          : "text-muted-foreground hover:bg-accent/30 hover:text-foreground hover:shadow-sm"
       )}
       key={item.id}
     >
       <Tooltip delayDuration={10}>
         <TooltipTrigger asChild>
-          <IconComponent width={20} height={20} />
+          <IconComponent width={18} height={18} />
         </TooltipTrigger>
-        <TooltipContent side="bottom" align="center" sideOffset={8}>
+        <TooltipContent side="bottom" align="center" sideOffset={8} className="text-xs">
           {item.label}
         </TooltipContent>
       </Tooltip>
@@ -175,9 +175,9 @@ function MenuList() {
 
   return (
     <>
-      <div className="relative flex items-center py-2 px-2 bg-primary/7">
+      <div className="relative flex items-center py-3 px-2 bg-card border-b border-border/50 shadow-xs">
         {showLeftFade && (
-          <div className="absolute left-0 top-0 bottom-0 w-8 bg-linear-to-r from-card to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-card to-transparent z-10 pointer-events-none" />
         )}
         <div
           ref={scrollRef}
@@ -201,7 +201,7 @@ function MenuList() {
         </div>
 
         {showRightFade && (
-          <div className="absolute right-0 top-0 bottom-0 w-8 bg-linear-to-l from-card to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-card to-transparent z-10 pointer-events-none" />
         )}
       </div>
 

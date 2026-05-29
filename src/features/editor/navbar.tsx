@@ -88,30 +88,32 @@ export default function Navbar({
         display: "grid",
         gridTemplateColumns: isLargeScreen ? "320px 1fr 320px" : "1fr 1fr 1fr"
       }}
-      className="bg-card pointer-events-none flex h-13 items-center border-b border-border/80 px-2"
+      className="bg-card pointer-events-none flex h-13 items-center border-b border-border shadow-sm px-3"
     >
       <DownloadProgressModal />
 
-      <div className="flex items-center gap-2">
-        <div className="pointer-events-auto flex h-11 items-center justify-center rounded-md px-2">
-          <span className="text-sm font-bold tracking-tight" style={{ color: '#f1420b' }}>Pure</span>
+      <div className="flex items-center gap-3">
+        <div className="pointer-events-auto flex h-11 items-center justify-center rounded-md px-2 hover:bg-secondary/30 transition-colors">
+          <span className="text-sm font-bold tracking-tight" style={{ color: '#e8541d' }}>Pure</span>
           <span className="text-sm font-bold tracking-tight text-foreground">Brain</span>
         </div>
 
-        <div className=" pointer-events-auto flex h-10 items-center px-1.5">
+        <div className="pointer-events-auto flex h-10 items-center gap-1 pl-2 border-l border-border/50">
           <Button
             onClick={handleUndo}
-            className="text-muted-foreground"
+            className="text-muted-foreground hover:text-foreground hover:bg-secondary/30 transition-colors"
             variant="ghost"
             size="icon"
+            title="Undo (Ctrl+Z)"
           >
             <Icons.undo width={20} />
           </Button>
           <Button
             onClick={handleRedo}
-            className="text-muted-foreground"
+            className="text-muted-foreground hover:text-foreground hover:bg-secondary/30 transition-colors"
             variant="ghost"
             size="icon"
+            title="Redo (Ctrl+Shift+Z)"
           >
             <Icons.redo width={20} />
           </Button>
@@ -120,20 +122,21 @@ export default function Navbar({
 
       <div className="flex h-13 items-center justify-center gap-2">
         {!isSmallScreen && (
-          <div className=" pointer-events-auto flex h-10 items-center gap-2 rounded-md px-2.5">
+          <div className="pointer-events-auto flex h-10 items-center gap-2 px-3 bg-secondary/10 rounded-md border border-border/30 focus-within:border-primary/50 focus-within:bg-secondary/20 transition-all">
             <AutosizeInput
               name="title"
               value={title}
               onChange={handleTitleChange}
               width={200}
-              inputClassName="border-none outline-none px-1 text-sm font-medium"
+              inputClassName="border-none outline-none px-0 text-sm font-medium bg-transparent text-foreground"
+              placeholder="Untitled video"
             />
           </div>
         )}
       </div>
 
       <div className="flex h-13 items-center justify-end gap-2">
-        <div className=" pointer-events-auto flex h-10 items-center gap-2 rounded-md px-2.5">
+        <div className="pointer-events-auto flex h-10 items-center gap-2 pl-2 border-l border-border/50">
           <ShortcutsPanel />
           <SettingsPanel projectName={title} />
           {/* Discord link removed */}
@@ -181,16 +184,16 @@ const DownloadPopover = ({ stateManager }: { stateManager: StateManager }) => {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          className="flex h-8 gap-1 border border-border rounded-full"
+          className="flex h-9 gap-2 border border-primary/50 bg-primary/10 text-primary hover:bg-primary/20 hover:border-primary transition-all rounded-md font-medium"
           size={isMediumScreen ? "sm" : "icon"}
         >
-          {/* <Download width={18} />{" "} */}
-          <span className="hidden md:block">Download</span>
+          <Download width={18} />
+          <span className="hidden md:block">Export</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent
         align="end"
-        className="bg-sidebar z-[250] flex w-60 flex-col gap-4"
+        className="bg-card z-[250] flex w-60 flex-col gap-4 border border-border shadow-lg"
       >
         <Label>Export settings</Label>
 

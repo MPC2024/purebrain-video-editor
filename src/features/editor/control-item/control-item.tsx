@@ -70,7 +70,7 @@ export const ControlItem = () => {
   }
 
   return (
-    <div className="w-full flex-none border-l border-border/80 bg-card hidden lg:block">
+    <div className="w-full flex-none border-l border-border/60 bg-card hidden lg:block shadow-sm">
       <ActiveControlItem trackItem={trackItem} />
     </div>
   );
